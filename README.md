@@ -22,7 +22,7 @@ In this manuscript, we apply the SISRS (CITE) bioinformatics pipeline to generat
 - *C. illinoinensis* x *C. cordiformis* (*Carya x brownii*): n = 3  
 - *C. illinoinensis* x *C. laciniosa* (*Carya x nussbaumeri*): n = 1  
 - *C. illinoinensis* x *C. myristiciformis*: n = 1  
-- *C. illinoinensis* x *C. ovata* (‘Henke’s Hican’) n = 1  
+- *C. illinoinensis* x *C. ovata* (‘Henke’s Hican’): n = 1  
 
 There were also two crosses where one of the two parents were putative hybrids:  
 
