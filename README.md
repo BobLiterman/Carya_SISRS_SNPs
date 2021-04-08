@@ -3,7 +3,7 @@
 ## Code Walkthrough
 
 ### 01) Study Data  
-In this manuscript, we apply the SISRS (CITE) bioinformatics pipeline to generate millions of species-identifying SNPs for diploid *Carya* (pecan and hickory), using only low-coverage, Illumina short-read data (i.e. genome skims). Samples from this study can be broken down into three groups:  
+In this manuscript, we apply the SISRS (CITE) bioinformatics pipeline to generate millions of species-identifying single-nucleotide polymorphisms (**SNPs**) for diploid *Carya* (pecan and hickory), using only low-coverage, Illumina short-read data (i.e. genome skims). Samples from this study can be broken down into three groups:  
 
 1) **Species samples**: Genome skim data for 8 species of diploid *Carya*  
 
@@ -27,7 +27,7 @@ In this manuscript, we apply the SISRS (CITE) bioinformatics pipeline to generat
 There were also two crosses where one of the two parents were putative hybrids:  
 
 - *C. x brownii* x *C. laciniosa*: n = 1  
-- (*C. ovata* x *C. cordiformis*) x *C. illinoinensis*: n = 2  
+- *C. x laneyi* (*C. ovata* x *C. cordiformis*) x *C. illinoinensis*: n = 2  
 
 3) **Companion Species**: One set of independent, higher-depth sequencing runs for each of the 8 diploid *Carya* species.  
 
@@ -43,34 +43,53 @@ There were also two crosses where one of the two parents were putative hybrids:
 ### 02) Read Preparation  
 All reads were trimmed and processed identically.  
 
-1) **Read merging**: Paired-end reads were merged using **bbmerge** from the **BBMap** suite (https://jgi.doe.gov/data-and-tools/bbtools/bb-tools-user-guide/bbmap-guide/).  
+1) **Read merging**: Paired-end reads were merged using *bbmerge* from the *BBMap* suite (https://jgi.doe.gov/data-and-tools/bbtools/bb-tools-user-guide/bbmap-guide/).  
 
 ```
 bbmerge.sh in=<SAMPLE>_Raw_R1.fastq.gz in2=<SAMPLE>_Raw_R2.fastq.gz outa=<SAMPLE>_Adapters.fa outm=<SAMPLE>_Merged_Raw.fastq.gz outu=<SAMPLE>_Unmerged_Raw_1.fastq.gz outu2=<SAMPLE>_Unmerged_Raw_2.fastq.gz
 ```
 
-2) **Adapter trimming**: Reads were adapter-trimmed using **bbduk**.  
+2) **Adapter trimming**: Reads were adapter-trimmed using *bbduk*.  
 
 ```
 bbduk.sh ref=<SAMPLE>_Adapters_BBMap.fa ktrim=r in=<SAMPLE>_Raw_R1.fastq.gz in2=<SAMPLE>_Raw_R2.fastq.gz out=<SAMPLE>_Adapter_Trim_1.fastq.gz out2=<SAMPLE>_Adapter_Trim_2.fastq.gz
 ```
 
-3) **Chloroplast assembly**: Adapter-trimmed reads were used to generate chloroplast assemblies for each sample using getOrganelle (https://github.com/Kinggerm/GetOrganelle).  
+3) **Chloroplast assembly**: Adapter-trimmed reads were used to generate chloroplast assemblies for each sample using *getOrganelle* (https://github.com/Kinggerm/GetOrganelle).  
 
 ```
 get_organelle_from_reads.py -1 <SAMPLE>_Unmerged_Adapter_Trim_1.fastq.gz -2 <SAMPLE>_Unmerged_Adapter_Trim_2.fastq.gz -u <SAMPLE>_Merged_Adapter_Trim.fastq.gz -t 20 -o <DIR>/<SAMPLE> -F embplant_pt -R 50 -k 21,45,65,85,105
 ```
 
-4) **Quality-trimming**: Reads were quality-trimmed using **bbduk**.  
+4) **Quality-trimming**: Reads were quality-trimmed using *bbduk*.  
 
 ```
 bbduk.sh ref=<SAMPLE>_Adapters_BBMap.fa qtrim=w ktrim=r trimq=10 maq=15 minlength=50 in=<SAMPLE>_Adapter_Trim_1.fastq.gz in2=<SAMPLE>_Adapter_Trim_2.fastq.gz out=<SAMPLE>_Trim_1.fastq.gz out2=<SAMPLE>_Trim_2.fastq.gz
 ```
 
-5) **Nuclear read separation**: Reads were mapped against the pooled chloroplast assemblies from Step 3 above using **bbmap**, and any reads that mapped were removed from the dataset leaving predominantly nuclear reads.  
+5) **Nuclear read separation**: Reads were mapped against the pooled chloroplast assemblies from Step 3 above using *bbmap*, and any reads that mapped were removed from the dataset leaving predominantly nuclear reads.  
 
 ```
 bbmap.sh in=<SAMPLE>_Trim_1.fastq.gz in2=<SAMPLE>_Trim_2.fastq.gz ambiguous=all threads=20 outm=Chloroplast_Reads/<SAMPLE>_Chloroplast_Trim_1.fastq.gz outm2=Chloroplast_Reads/<SAMPLE>_Chloroplast_Trim_2.fastq.gz outu=Nuclear_Reads/<SAMPLE>_Nuclear_Trim_1.fastq.gz outu2=Nuclear_Reads/<SAMPLE>_Nuclear_Trim_2.fastq.gz
 ```
 
+### 03) Folder Setup  
+If you are trying to follow this Walkthrough as instructional, there is a particular folder structure that needs to be in place.  
+- Base_Directory  
+    - Reads  
+        - TrimReads  
+        - scripts  
+            - Read_Subsetter.py  
+    - Composite  
 
+### 04) Composite Genome Assembly  
+In order to isolate SNPs that can identify *Carya* species, we first need to isolate orthologous loci that were conserved among the *Carya* diploids. While a reference genome for *C. illinoinensis* has been published (https://academic.oup.com/gigascience/article/8/5/giz036/5484800), many clades lack a reference genome and in this study we wanted to provide steps for researchers that have WGS data, but no reasonable reference. SISRS generates orthologous sequence data through a 'composite genome' assembly process (i.e. a pan genome assembled using reads pooled across species). We only used our genome skim data to assembled the composite genome (i.e. no hybrid or companion data was used).  
+
+1) **Read Subsetting**: SISRS composite genomes are assembled by first subsetting reads equally among taxa, and among samples therein. By default, the subsampling targets a final assembly depth of 10X depending on the approximate size of the clade genome. For this study, we used a genome size estimate of 750Mb.  
+  
+- The subsetting script can be found in [**scripts/SISRS/Read_Subsetter.py**](scripts/SISRS/Read_Subsetter.py).  
+- 
+
+```
+python Read_Subsetter.py -g 750000000
+```
