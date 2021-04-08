@@ -73,6 +73,70 @@ bbduk.sh ref=<SAMPLE>_Adapters_BBMap.fa qtrim=w ktrim=r trimq=10 maq=15 minlengt
 bbmap.sh in=<SAMPLE>_Trim_1.fastq.gz in2=<SAMPLE>_Trim_2.fastq.gz ambiguous=all threads=20 outm=Chloroplast_Reads/<SAMPLE>_Chloroplast_Trim_1.fastq.gz outm2=Chloroplast_Reads/<SAMPLE>_Chloroplast_Trim_2.fastq.gz outu=Nuclear_Reads/<SAMPLE>_Nuclear_Trim_1.fastq.gz outu2=Nuclear_Reads/<SAMPLE>_Nuclear_Trim_2.fastq.gz
 ```
 
+**Results**:  
+| Study_ID  | Dataset   | Organism_Type | Sample_Type | Total_Trim_Bases | Nuclear_Trim_Bases | Percent_Nuclear | Nuclear_Coverage |
+|-----------|-----------|---------------|-------------|------------------|--------------------|-----------------|------------------|
+| CarAqu    | Study     | Species       | Species     | 2,906,351,845    | 2,819,882,985      | 97%             | 3.76             |
+| CarCat    | Study     | Species       | Species     | 3,328,074,932    | 3,148,712,883      | 95%             | 4.20             |
+| CarCor    | Study     | Species       | Species     | 3,513,587,342    | 3,379,188,051      | 96%             | 4.51             |
+| CarIll    | Study     | Species       | Species     | 4,140,494,431    | 4,061,837,481      | 98%             | 5.42             |
+| CarLac    | Study     | Species       | Species     | 1,512,372,923    | 1,486,027,288      | 98%             | 1.98             |
+| CarMyr    | Study     | Species       | Species     | 856,140,514      | 839,708,135        | 98%             | 1.12             |
+| CarOva    | Study     | Species       | Species     | 2,427,825,202    | 2,370,364,475      | 98%             | 3.16             |
+| CarPalm   | Study     | Species       | Species     | 1,099,075,171    | 1,084,591,557      | 99%             | 1.45             |
+| CarAqu    | Companion | Species       | Species     | 6,316,210,051    | 6,152,118,179      | 97%             | 8.20             |
+| CarCat    | Companion | Species       | Species     | 7,776,358,214    | 7,455,973,085      | 96%             | 9.94             |
+| CarCor    | Companion | Species       | Species     | 7,711,983,355    | 7,577,602,373      | 98%             | 10.10            |
+| CarIll    | Companion | Species       | Species     | 5,979,862,916    | 5,864,294,842      | 98%             | 7.82             |
+| CarLac    | Companion | Species       | Species     | 4,714,724,473    | 4,636,123,901      | 98%             | 6.18             |
+| CarMyr    | Companion | Species       | Species     | 5,211,862,708    | 5,083,260,783      | 98%             | 6.78             |
+| CarOva    | Companion | Species       | Species     | 5,401,163,361    | 5,271,766,464      | 98%             | 7.03             |
+| CarPalm   | Companion | Species       | Species     | 4,913,799,132    | 4,783,538,578      | 97%             | 6.38             |
+| CarAqu    | Pooled    | Species       | Species     | 9,222,561,896    | 8,972,001,164      | 97%             | 11.96            |
+| CarCat    | Pooled    | Species       | Species     | 11,104,433,146   | 10,604,685,968     | 95%             | 14.14            |
+| CarCor    | Pooled    | Species       | Species     | 11,225,570,697   | 10,956,790,424     | 98%             | 14.61            |
+| CarIll    | Pooled    | Species       | Species     | 10,120,357,347   | 9,926,132,323      | 98%             | 13.23            |
+| CarLac    | Pooled    | Species       | Species     | 6,227,097,396    | 6,122,151,189      | 98%             | 8.16             |
+| CarMyr    | Pooled    | Species       | Species     | 6,068,003,222    | 5,922,968,918      | 98%             | 7.90             |
+| CarOva    | Pooled    | Species       | Species     | 7,828,988,563    | 7,642,130,939      | 98%             | 10.19            |
+| CarPalm   | Pooled    | Species       | Species     | 6,012,874,303    | 5,868,130,135      | 98%             | 7.82             |
+| CarAqu_1  | Study     | Species       | Specimen    | 1,240,836,872    | 1,216,062,794      | 98%             | 1.62             |
+| CarAqu_2  | Study     | Species       | Specimen    | 643,386,892      | 629,849,427        | 98%             | 0.84             |
+| CarAqu_3  | Study     | Species       | Specimen    | 1,022,128,081    | 973,970,764        | 95%             | 1.30             |
+| CarCat_1  | Study     | Species       | Specimen    | 2,018,656,766    | 1,896,603,905      | 94%             | 2.53             |
+| CarCat_2  | Study     | Species       | Specimen    | 1,309,418,166    | 1,252,108,978      | 96%             | 1.67             |
+| CarCor_2  | Study     | Species       | Specimen    | 1,166,373,344    | 1,087,952,554      | 93%             | 1.45             |
+| CarCor_3  | Study     | Species       | Specimen    | 817,541,788      | 801,973,640        | 98%             | 1.07             |
+| CarCor_4  | Study     | Species       | Specimen    | 556,963,271      | 546,443,881        | 98%             | 0.73             |
+| CarCor_5  | Study     | Species       | Specimen    | 534,591,918      | 521,583,259        | 98%             | 0.70             |
+| CarCor_6  | Study     | Species       | Specimen    | 438,117,021      | 421,234,717        | 96%             | 0.56             |
+| CarIll_1  | Study     | Species       | Specimen    | 699,631,159      | 670,188,589        | 96%             | 0.89             |
+| CarIll_2  | Study     | Species       | Specimen    | 1,463,949,510    | 1,435,537,681      | 98%             | 1.91             |
+| CarIll_3  | Study     | Species       | Specimen    | 895,171,897      | 884,412,347        | 99%             | 1.18             |
+| CarIll_4  | Study     | Species       | Specimen    | 518,581,163      | 514,102,543        | 99%             | 0.69             |
+| CarIll_5  | Study     | Species       | Specimen    | 563,160,702      | 557,596,321        | 99%             | 0.74             |
+| CarLac_1  | Study     | Species       | Specimen    | 1,096,986,140    | 1,079,857,490      | 98%             | 1.44             |
+| CarLac_3  | Study     | Species       | Specimen    | 415,386,783      | 406,169,798        | 98%             | 0.54             |
+| CarMyr_1A | Study     | Species       | Specimen    | 856,140,514      | 839,708,135        | 98%             | 1.12             |
+| CarOva_1  | Study     | Species       | Specimen    | 809,251,226      | 788,968,773        | 97%             | 1.05             |
+| CarOva_2  | Study     | Species       | Specimen    | 1,043,384,155    | 1,020,734,890      | 98%             | 1.36             |
+| CarOva_3  | Study     | Species       | Specimen    | 575,189,821      | 560,660,812        | 97%             | 0.75             |
+| CarPalm_1 | Study     | Species       | Specimen    | 433,018,606      | 423,807,716        | 98%             | 0.57             |
+| CarPalm_2 | Study     | Species       | Specimen    | 666,056,565      | 660,783,841        | 99%             | 0.88             |
+| myrxill_1 | Study     | Hybrid        | Specimen    | 796,277,556      | 783,476,660        | 98%             | 1.04             |
+| xbr_1     | Study     | Hybrid        | Specimen    | 1,092,545,811    | 1,059,655,584      | 97%             | 1.41             |
+| xbr_2     | Study     | Hybrid        | Specimen    | 671,977,744      | 662,873,028        | 99%             | 0.88             |
+| xbr_3     | Study     | Hybrid        | Specimen    | 993,055,538      | 988,392,035        | 100%            | 1.32             |
+| xbrl_1    | Study     | Hybrid        | Specimen    | 931,978,537      | 925,654,760        | 99%             | 1.23             |
+| xila_1    | Study     | Hybrid        | Specimen    | 956,297,607      | 937,470,941        | 98%             | 1.25             |
+| xila_2    | Study     | Hybrid        | Specimen    | 659,509,130      | 654,559,563        | 99%             | 0.87             |
+| xio_1     | Study     | Hybrid        | Specimen    | 777,233,207      | 770,030,411        | 99%             | 1.03             |
+| xlc_1     | Study     | Hybrid        | Specimen    | 1,019,906,968    | 1,016,113,773      | 100%            | 1.35             |
+| xlc_2     | Study     | Hybrid        | Specimen    | 1,215,089,683    | 1,206,563,163      | 99%             | 1.61             |
+| xlc_3     | Study     | Hybrid        | Specimen    | 759,828,575      | 751,298,527        | 99%             | 1.00             |
+| xlc_4     | Study     | Hybrid        | Specimen    | 837,679,541      | 828,246,350        | 99%             | 1.10             |
+| xnuss_1   | Study     | Hybrid        | Specimen    | 441,618,669      | 427,508,151        | 97%             | 0.57             |
+
 ### 03) Folder Setup  
 If you are trying to follow this Walkthrough as instructional, there is a particular folder structure that needs to be in place.  
 - Base_Directory  
