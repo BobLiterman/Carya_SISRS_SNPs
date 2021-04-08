@@ -86,7 +86,7 @@ If you are trying to follow this Walkthrough as instructional, there is a partic
                 - Sample_C_Trim_1.fastq.gz  
                 - Sample_C_Trim_2.fastq.gz  
             - ETC.
-        - scripts  
+    - scripts  
             - Read_Subsetter.py  
 
 ### 04) Composite Genome Assembly  
