@@ -2,7 +2,7 @@
 ## Robert Literman, Brittany M. Ott, Jun Wen, LJ Grauke, Rachel Schwartz, Sara M. Handy
 
 ## Pre-Note
-This is a walkthrough of this manuscript, and is not meant as step-by-step code/script instructions. See section at the bottom of this README for tips on how to run this pipeline with your own data.  
+This is a walkthrough of this manuscript, and is not meant as step-by-step code/script instructions. To run SISRS and generate orthologs and singletons, you can follow the SISRS walkthrough (). After you have done that, you can jump back in here at **Step X** to get a sense of the data analysis steps. A user-friendly version of this **entire** pipeline is currently under development, but all scripts are provided here.  
 
 ## Manuscript Walkthrough
 
@@ -163,23 +163,24 @@ mpirun -np 200 Ray -k 31 -p CarAqu_1_Nuclear_Unmerged_GenomeReads_1.fastq.gz Car
 
 ```
 # Make Composite Genome folder within Ray directory
-
 mkdir <BASE_DIR>/Composite/Ray_Nuclear_Carya/Composite_Genome
 cd <BASE_DIR>/Composite/Ray_Nuclear_Carya/Composite_Genome
 
 # Add SISRS_ to Ray contigs
 rename.sh in=<BASE_DIR>/Composite/Ray_Nuclear_Carya/Contigs.fasta out=<BASE_DIR>/Composite/Ray_Nuclear_Carya/Composite_Genome/contigs.fa prefix=SISRS addprefix=t trd=t
 
+# Build index
 bowtie2-build contigs.fa contigs -p 20
 samtools faidx contigs.fa
 
+# Generate a file with all contig lengths based on Ray output
 python Genome_SiteLengths.py <BASE_DIR>/Composite/Ray_Nuclear_Carya/Composite_Genome
 
+# Get composite genome stats
 stats.sh in=contigs.fa &> BBmap_Stats
-
 ```
 
-4) **Mapping SISRS orthologs onto *C. illinoinensis* reference genome**: While no reference genome or annotation data was used in generating our datasets, we also wanted to get a sense of what we put together. To that end, we mapped SISRS orthologs derived from the pooled *C. illinoinensis* samples against the pecan reference genome from NCBI (GCA_011037805.1_ASM1103780v1).  
+4) **Mapping SISRS orthologs onto *C. illinoinensis* reference genome**: While no reference genome or annotation data was used in generating our datasets, we wanted to get a sense of what we put together. To that end, we mapped SISRS orthologs derived from the pooled *C. illinoinensis* samples against the pecan reference genome from NCBI (GCA_011037805.1_ASM1103780v1).  
   - For the purposes of *this study*, we operated as if there was no reference genome, and all orthologs/sites were considered in the analysis.  
   - Otherwise, this step provides a possible data filtration step (i.e. only consider SISRS orthologs that can be uniquely mapped onto the reference genome)  
   - Genome_Mapper.py can be found in [**scripts/SISRS/Genome_Mapper.py**](scripts/SISRS/Genome_Mapper.py)  
@@ -207,7 +208,7 @@ python <DIR>/Reference_Genome/Genome_Mapper.py <DIR>/Reference_Genome/CarIll_Map
   
 **Assembly Statistics**  
 
-Using reads pooled across 8 diploid species, We were able to assemble over 169Mb of nuclear ortholog data for the *Carya* group. While no reference genome was used in their construction, our assembly uniquely covers over 14% of the *C. illinoinensis* assembly, with over 93Mb of uniquely mapping sites. 
+Using reads pooled across 8 diploid species, we were able to assemble over 169Mb of nuclear ortholog data for the *Carya* group. While no reference genome was used in their construction, our assembly uniquely covers over 14% of the *C. illinoinensis* assembly, with over 93Mb of uniquely mapping sites. 
 
 |                                   |             |
 |-----------------------------------|-------------|
@@ -236,11 +237,14 @@ All samples are compared to each other based on this shared composite genome. To
   3. In this way, each sample has the same list of sites (every possible site in the composite genome), but the bases themselves are based on the sample data  
     - **Note**: Indels are taken into account, and gap data can be included or excluded in analyses later  
 
-For this study, we processed the following datasets to extract fixed sites:  
+For this study, we processed the following datasets to extract fixed sites from species...  
 
   - Study *Carya* species samples pooled by species (**Study**)  
   - Companion *Carya* samples individually (**Companion**)  
   - Study *Carya* species samples and Companion samples pooled by species  (**Pooled**)  
+
+... and individual specimens:  
+
   - Study *Carya* species samples individually 
   - Study *Carya* hybrid samples individually  
 
@@ -367,6 +371,67 @@ python SCRIPT_DIR/get_pruned_dict.py SISRS_DIR/TAXA COMPOSITE_DIR MINREAD THRESH
 | xnuss_1      | Study       | Hybrid                | Specimen        | 29,001,395       | 17.1%                       |
 
 ### 05) **Identifying species-informative SNPs**  
-In order to classify our study specimens, we first needed to generate a set of species-identifying SNPs from the Companion data. To do this, after SISRS mapping,   
+In order to classify our study specimens, we first needed to generate a set of species-identifying SNPs from the Companion data. To do this, after SISRS mapping we analyzed the ortholog data derived from the Companion data, and extracted all sites where (1) no species had missing data, and (2) there were one or more species with singleton-like variation.  
+
+  - For purposes of phylogenetic tree building, we also extracted all parsimony-informative sites as well.  
+
+```
+# Generate alignment of all SISRS sites
+python Output_SISRS.py
+
+# Filter sites with singleton variation down to those sites with no missing data
+python filter_nexus_for_missing.py $PWD/alignment_singletons.nex 0
+
+# Filter sites with parsimony-informative variation down to those sites with no missing data
+python filter_nexus_for_missing.py $PWD/alignment_pi.nex 0
+
+```
+
+**Output**  
+
+```
+# Study Species
+
+8806640 total variable sites [alignment.nex]
+7612680 variable sites are singletons (Invariant except for singletons) [alignment_singletons.nex]
+47152 variable sites contain singletons (Variable, but with 1 or more singletons) [alignment_pi_singletons.nex]
+1146808 variable sites contain no singletons (Variable, parsimony-informative [alignment_pi.nex]
+1144787 variable sites are biallelic, parsimony-informative sites [alignment_bi.nex]
+
+With 0 taxa allowed to be missing, and with gaps allowed, 7612680 sites from alignment_singletons.nex (6 allowed missing) are reduced to **191307** sites (7421373 sites or 97.49% lost)
+With 0 taxa allowed to be missing, and with no gaps allowed, 7612680 sites from alignment_singletons.nex (6 allowed missing) are reduced to **183302** sites (7429378 sites or 97.59% lost)
+
+With 0 taxa allowed to be missing, and with gaps allowed, 1146808 sites from Study_Taxa_pi.nex (6 allowed missing) are reduced to **35889** sites (1110919 sites or 96.87% lost)
+With 0 taxa allowed to be missing, and with no gaps allowed, 1146808 sites from Study_Taxa_pi.nex (6 allowed missing) are reduced to **35004** sites (1111804 sites or 96.95% lost)
+
+# Companion Species
+
+12241724 total variable sites [alignment.nex]
+10131073 variable sites are singletons (Invariant except for singletons) [alignment_singletons.nex]
+120856 variable sites contain singletons (Variable, but with 1 or more singletons) [alignment_pi_singletons.nex]
+1989795 variable sites contain no singletons (Variable, parsimony-informative [alignment_pi.nex]
+1983007 variable sites are biallelic, parsimony-informative sites [alignment_bi.nex]
+
+With 0 taxa allowed to be missing, and with gaps allowed, 10131073 sites from alignment_singletons.nex (6 allowed missing) are reduced to **1337969** sites (8793104 sites or 86.79% lost)
+With 0 taxa allowed to be missing, and with no gaps allowed, 10131073 sites from alignment_singletons.nex (6 allowed missing) are reduced to **1275561** sites (8855512 sites or 87.41% lost)
+
+With 0 taxa allowed to be missing, and with gaps allowed, 1989795 sites from Companion_Taxa_pi.nex (6 allowed missing) are reduced to **321156** sites (1668639 sites or 83.86% lost)
+With 0 taxa allowed to be missing, and with no gaps allowed, 1989795 sites from Companion_Taxa_pi.nex (6 allowed missing) are reduced to **311893** sites (1677902 sites or 84.33% lost)
+
+# Pooled Species
+
+12142835 total variable sites [alignment.nex]
+9994593 variable sites are singletons (Invariant except for singletons) [alignment_singletons.nex]
+123165 variable sites contain singletons (Variable, but with 1 or more singletons) [alignment_pi_singletons.nex]
+2025077 variable sites contain no singletons (Variable, parsimony-informative [alignment_pi.nex]
+2017748 variable sites are biallelic, parsimony-informative sites [alignment_bi.nex]
+
+With 0 taxa allowed to be missing, and with gaps allowed, 9994593 sites from alignment_singletons.nex (6 allowed missing) are reduced to **1429839** sites (8564754 sites or 85.69% lost)
+With 0 taxa allowed to be missing, and with no gaps allowed, 9994593 sites from alignment_singletons.nex (6 allowed missing) are reduced to **1356809** sites (8637784 sites or 86.42% lost)
+
+With 0 taxa allowed to be missing, and with gaps allowed, 2025077 sites from Pooled_Taxa_pi.nex (6 allowed missing) are reduced to **338907** sites (1686170 sites or 83.26% lost)
+With 0 taxa allowed to be missing, and with no gaps allowed, 2025077 sites from Pooled_Taxa_pi.nex (6 allowed missing) are reduced to **328325** sites (1696752 sites or 83.79% lost)
+```
+
 
 
