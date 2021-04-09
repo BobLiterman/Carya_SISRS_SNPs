@@ -158,7 +158,7 @@ In order to isolate SNPs that can identify *Carya* species, we first need to iso
 
 1) **Read Subsetting**: SISRS composite genomes are assembled by first subsetting reads equally among taxa, and among samples therein. By default, the subsampling targets a final assembly depth of 10X depending on the approximate size of the clade genome. For this study, we used a genome size estimate of 750Mb.  
   
-- The subsetting script can be found in [**scripts/SISRS/Read_Subsetter.py**](scripts/SISRS/Read_Subsetter.py), and was run as:  
+  - The subsetting script can be found in [**scripts/SISRS/Read_Subsetter.py**](scripts/SISRS/Read_Subsetter.py), and was run as:  
 
 ```
 python Read_Subsetter.py -g 750000000
@@ -172,7 +172,7 @@ mpirun -np 200 Ray -k 31 -p CarAqu_1_Nuclear_Unmerged_GenomeReads_1.fastq.gz Car
 
 3) **Composite Genome Processing**: The resulting contigs assembled by Ray are then prepped for mapping.  
 
-- The Genome_SiteLengths.py script can be found in [**scripts/SISRS/Genome_SiteLengths.py**](scripts/SISRS/Genome_SiteLengths.py).
+  - The Genome_SiteLengths.py script can be found in [**scripts/SISRS/Genome_SiteLengths.py**](scripts/SISRS/Genome_SiteLengths.py).
 
 ```
 # Make a new folder for the composite genome
@@ -195,7 +195,7 @@ stats.sh in=contigs.fa &> BBmap_Stats
 
 4) **Mapping SISRS orthologs onto *C. illinoinensis* reference genome**: While no reference genome or annotation data was used in generating our datasets, we also wanted to get a sense of what we put together. To that end, we mapped SISRS orthologs against the pecan reference genome from NCBI (GCA_011037805.1_ASM1103780v1).  
 
-- The Genome_Mapper.py script can be found in [**scripts/Reference_Genome_Mapping/Genome_Mapper.py**](scripts/Reference_Genome_Mapping/Genome_Mapper.py).
+  - The Genome_Mapper.py script can be found in [**scripts/Reference_Genome_Mapping/Genome_Mapper.py**](scripts/Reference_Genome_Mapping/Genome_Mapper.py).
 
 ```
 # Map SISRS orthologs from C. illinoinensis (pooled) against reference genome
@@ -225,7 +225,7 @@ python <DIR>/Genome_Mapper.py <DIR>/CarIll_MapData.tsv
 
 Using reads pooled across 8 diploid species, We were able to assemble over 169Mb of nuclear ortholog data for the *Carya* group. While no reference genome was used in their construction, our assembly uniquely covers over 14% of the *C. illinoinensis* assembly, with over 93Mb of uniquely mapping sites. For the purposes of *this study*, we operated as if there was no reference genome, and all orthologs/sites were considered in the analysis.  
 
-    - In cases where reference genomes **do** exist, this step provides a possible data filtration step (i.e. only consider SISRS orthologs that can be uniquely mapped onto the reference genome)  
+  - In cases where reference genomes **do** exist, this step provides a possible data filtration step (i.e. only consider SISRS orthologs that can be uniquely mapped onto the reference genome)  
 
 |                                   |             |
 |-----------------------------------|-------------|
@@ -246,22 +246,21 @@ Using reads pooled across 8 diploid species, We were able to assemble over 169Mb
 | **Percent_Reference_Genome**      | 14.36%      |
 
 ### 05) **SISRS Fixed Allele Calling**  
-
 All samples are compared to each other based on this shared composite genome. To generate sample- or species-specific ortholog data for our samples, the basic steps are:  
 
-    1. Map reads from each sample onto the composite genome, only allowing uniquely mapping reads.  
-    2. After mapping, identify homozygous/fixed sites (i.e. sites with a single allele) and replace all other bases with 'N'  
-        - By default, SISRS requires three reads of coverage to call a site, but for this study, we only required a single read  
-    3. In this way, each sample has the same list of sites (every possible site in the composite genome), but the bases themselves are based on the sample data  
-        - **Note**: Indels are taken into account, and gap data can be included or excluded in analyses later  
+  1. Map reads from each sample onto the composite genome, only allowing uniquely mapping reads.  
+  2. After mapping, identify homozygous/fixed sites (i.e. sites with a single allele) and replace all other bases with 'N'  
+    - By default, SISRS requires three reads of coverage to call a site, but for this study, we only required a single read  
+  3. In this way, each sample has the same list of sites (every possible site in the composite genome), but the bases themselves are based on the sample data  
+    - **Note**: Indels are taken into account, and gap data can be included or excluded in analyses later  
 
 For this study, we processed the following datasets to extract fixed sites:  
 
-    - Study *Carya* species samples pooled by species (**Study**)  
-    - Companion *Carya* samples individually (**Companion**)  
-    - Study *Carya* species samples and Companion samples pooled by species  (**Pooled**)  
-    - Study *Carya* species samples individually 
-    - Study *Carya* hybrid samples individually  
+  - Study *Carya* species samples pooled by species (**Study**)  
+  - Companion *Carya* samples individually (**Companion**)  
+  - Study *Carya* species samples and Companion samples pooled by species  (**Pooled**)  
+  - Study *Carya* species samples individually 
+  - Study *Carya* hybrid samples individually  
 
 | **Study_ID** | **Dataset** | **Species_or_Hybrid** | **Sample_Type** | **Called_Sites** | **Percent_Composite_Sites** |
 |--------------|-------------|-----------------------|-----------------|------------------|-----------------------------|
