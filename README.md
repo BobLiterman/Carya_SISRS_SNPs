@@ -222,6 +222,18 @@ python <DIR>/Genome_Mapper.py <DIR>/CarIll_MapData.tsv
 ```
 ### Assembly Statistics
 
-| **Contig_Count** | **N50**     | **L50** | **Uniquely_Mapped_Contigs** | **Multiply_Mapped_Contigs** | **Unmapped_Contigs** | **Percent_Uniquely_Mapped** | **Percent_Multiply_Mapped** | **Percent_Unmapped** | **Total_Bases** | **Mapped_Bases** | **Uniquely_Mapped_Bases** | **Percent_Mapped_Bases** | **Percent_Uniquely_Mapped_Bases** | **Percent_Reference_Genome** |
-|------------------|-------------|---------|-----------------------------|-----------------------------|----------------------|-----------------------------|-----------------------------|----------------------|-----------------|------------------|---------------------------|--------------------------|-----------------------------------|------------------------------|
-| 820,113          | 250,025     | 188     | 475,539                     | 81,970                      | 262,604              | 57.98%                      | 9.99%                       | 32.02%               | 169,107,690     | 100,495,556      | 93,513,132                | 59.43%                   | 55.30%                            | 14.36%                       |
+| **Contig_Count**                  | 820,113     |
+| **N50**                           | 250,025     |
+| **L50**                           | 188         |
+| **Uniquely_Mapped_Contigs**       | 475,539     |
+| **Multiply_Mapped_Contigs**       | 81,970      |
+| **Unmapped_Contigs**              | 262,604     |
+| **Percent_Uniquely_Mapped**       | 57.98%      |
+| **Percent_Multiply_Mapped**       | 9.99%       |
+| **Percent_Unmapped**              | 32.02%      |
+| **Total_Bases**                   | 169,107,690 |
+| **Mapped_Bases**                  | 100,495,556 |
+| **Uniquely_Mapped_Bases**         | 93,513,132  |
+| **Percent_Mapped_Bases**          | 59.43%      |
+| **Percent_Uniquely_Mapped_Bases** | 55.30%      |
+| **Percent_Reference_Genome**      | 14.36%      |
