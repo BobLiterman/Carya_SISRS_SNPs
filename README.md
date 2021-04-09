@@ -26,8 +26,8 @@ In this manuscript, we apply the SISRS (CITE) bioinformatics pipeline to generat
 
     There were also two crosses where one of the two parents were putative hybrids:  
 
-        - *C. x brownii* x *C. laciniosa* (xbrl): n = 1  
-        - *C. x laneyi* (*C. ovata* x *C. cordiformis*) x *C. illinoinensis* (xila): n = 2  
+    - *C. x brownii* x *C. laciniosa* (xbrl): n = 1  
+    - *C. x laneyi* (*C. ovata* x *C. cordiformis*) x *C. illinoinensis* (xila): n = 2  
 
 3) **Companion Species**: One set of independent, higher-depth sequencing runs for each of the 8 diploid *Carya* species.  
 
