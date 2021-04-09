@@ -222,6 +222,8 @@ python <DIR>/Genome_Mapper.py <DIR>/CarIll_MapData.tsv
 ```
 ### Assembly Statistics
 
+|                                   |             |
+|-----------------------------------|-------------|
 | **Contig_Count**                  | 820,113     |
 | **N50**                           | 250,025     |
 | **L50**                           | 188         |
