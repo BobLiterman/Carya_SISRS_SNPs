@@ -1,6 +1,10 @@
 # Reference-free discovery of millions of SNPs permits species and hybrid identification in Carya (Hickory)  
 ## Robert Literman, Brittany M. Ott, Jun Wen, LJ Grauke, Rachel Schwartz, Sara M. Handy
-## Code Walkthrough
+
+## Pre-Note
+This is a walkthrough of this manuscript, and is not meant as step-by-step code/script instructions. See section at the bottom of this README for tips on how to run this pipeline with your own data.  
+
+## Manuscript Walkthrough
 
 ### 01) Study Data  
 In this manuscript, we apply the SISRS (CITE) bioinformatics pipeline to generate millions of species-identifying single-nucleotide polymorphisms (**SNPs**) for diploid *Carya* (pecan and hickory), using only low-coverage, Illumina short-read data (i.e. genome skims). Samples from this study can be broken down into three groups:  
@@ -137,95 +141,73 @@ bbmap.sh in=<SAMPLE>_Trim_1.fastq.gz in2=<SAMPLE>_Trim_2.fastq.gz ambiguous=all 
 | xlc_4         | Study         | Hybrid            | Specimen        | 837,679,541          | 828,246,350            | 99%                 | 1.10                 |
 | xnuss_1       | Study         | Hybrid            | Specimen        | 441,618,669          | 427,508,151            | 97%                 | 0.57                 |
 
-### 03) Folder Setup  
-If you are trying to follow this Walkthrough as instructional, there is a particular folder structure that needs to be in place. Plans are underway to create a more streamlined, user-friendly version of this pipeline.  
-- BASE_DIR  
-    - Reads  
-        - TrimReads  
-            - Species_1  
-                - Sample_A_Trim_1.fastq.gz  
-                - Sample_A_Trim_2.fastq.gz  
-                - Sample_B_Trim.fastq.gz  
-            - Species_2  
-                - Sample_C_Trim_1.fastq.gz  
-                - Sample_C_Trim_2.fastq.gz  
-            - ETC.
-    - scripts  
-            - Read_Subsetter.py  
+### 03) Composite Genome Assembly  
+In order to isolate SNPs that can identify *Carya* species, we first need to isolate orthologous loci that were conserved among the *Carya* diploids. While a reference genome for *C. illinoinensis* has been published (https://academic.oup.com/gigascience/article/8/5/giz036/5484800), many clades lack a reference genome and in this study we wanted to provide steps for researchers that have WGS data, but no reasonable reference. SISRS generates orthologous sequence data through a 'composite genome' assembly process (i.e. a pan genome assembled using reads pooled across species).    
 
-### 04) Composite Genome Assembly  
-In order to isolate SNPs that can identify *Carya* species, we first need to isolate orthologous loci that were conserved among the *Carya* diploids. While a reference genome for *C. illinoinensis* has been published (https://academic.oup.com/gigascience/article/8/5/giz036/5484800), many clades lack a reference genome and in this study we wanted to provide steps for researchers that have WGS data, but no reasonable reference. SISRS generates orthologous sequence data through a 'composite genome' assembly process (i.e. a pan genome assembled using reads pooled across species). We only used our genome skim data to assembled the composite genome (i.e. no hybrid or companion data was used).  
-
-1) **Read Subsetting**: SISRS composite genomes are assembled by first subsetting reads equally among taxa, and among samples therein. By default, the subsampling targets a final assembly depth of 10X depending on the approximate size of the clade genome. For this study, we used a genome size estimate of 750Mb.  
-  
-  - The subsetting script can be found in [**scripts/SISRS/Read_Subsetter.py**](scripts/SISRS/Read_Subsetter.py), and was run as:  
+1) **Read Subsetting**: SISRS composite genomes are assembled by first subsetting reads equally among taxa, and among samples therein. By default, the subsampling targets a final assembly depth of 10X (depending on the approximate size of the clade genome). For this study, we used a genome size estimate of 750Mb. We only used our genome skim data to assembled the composite genome (i.e. no hybrid or companion data was used).  
+  - 750Mb * 10X = 7,500Mb Needed --> 8 species --> 937Mb per species  
+  - Read_Subsetter.py script can be found in  [**scripts/SISRS/Read_Subsetter.py**](scripts/SISRS/Read_Subsetter.py)
 
 ```
-python Read_Subsetter.py -g 750000000
+python Read_Subetter.py -g 750000000
 ```
 
-2) **Genome Assembly**: SISRS uses *Ray* for genome assembly by default. The subset reads from Step 1 are used in assembly. In this study, both merged and unmerged reads were used.
+2) **Genome Assembly**: SISRS uses *Ray* for genome assembly by default. The subset reads from Step 1 are used in assembly. In this study, both merged and unmerged reads were used.  
 
 ```
 mpirun -np 200 Ray -k 31 -p CarAqu_1_Nuclear_Unmerged_GenomeReads_1.fastq.gz CarAqu_1_Nuclear_Unmerged_GenomeReads_2.fastq.gz -s CarAqu_1_Nuclear_Merged_GenomeReads.fastq.gz -p CarAqu_2_Nuclear_Unmerged_GenomeReads_1.fastq.gz CarAqu_2_Nuclear_Unmerged_GenomeReads_2.fastq.gz -s CarAqu_2_Nuclear_Merged_GenomeReads.fastq.gz -p CarAqu_3_Nuclear_Unmerged_GenomeReads_1.fastq.gz CarAqu_3_Nuclear_Unmerged_GenomeReads_2.fastq.gz -s CarAqu_3_Nuclear_Merged_GenomeReads.fastq.gz -p CarCat_1_Nuclear_Unmerged_GenomeReads_1.fastq.gz CarCat_1_Nuclear_Unmerged_GenomeReads_2.fastq.gz -s CarCat_1_Nuclear_Merged_GenomeReads.fastq.gz -p CarCat_2_Nuclear_Unmerged_GenomeReads_1.fastq.gz CarCat_2_Nuclear_Unmerged_GenomeReads_2.fastq.gz -s CarCat_2_Nuclear_Merged_GenomeReads.fastq.gz -p CarCor_2_Nuclear_Unmerged_GenomeReads_1.fastq.gz CarCor_2_Nuclear_Unmerged_GenomeReads_2.fastq.gz -s CarCor_2_Nuclear_Merged_GenomeReads.fastq.gz -p CarCor_3_Nuclear_Unmerged_GenomeReads_1.fastq.gz CarCor_3_Nuclear_Unmerged_GenomeReads_2.fastq.gz -s CarCor_3_Nuclear_Merged_GenomeReads.fastq.gz -p CarCor_4_Nuclear_Unmerged_GenomeReads_1.fastq.gz CarCor_4_Nuclear_Unmerged_GenomeReads_2.fastq.gz -s CarCor_4_Nuclear_Merged_GenomeReads.fastq.gz -p CarCor_5_Nuclear_Unmerged_GenomeReads_1.fastq.gz CarCor_5_Nuclear_Unmerged_GenomeReads_2.fastq.gz -s CarCor_5_Nuclear_Merged_GenomeReads.fastq.gz -p CarCor_6_Nuclear_Unmerged_GenomeReads_1.fastq.gz CarCor_6_Nuclear_Unmerged_GenomeReads_2.fastq.gz -s CarCor_6_Nuclear_Merged_GenomeReads.fastq.gz -p CarIll_1_Nuclear_Unmerged_GenomeReads_1.fastq.gz CarIll_1_Nuclear_Unmerged_GenomeReads_2.fastq.gz -s CarIll_1_Nuclear_Merged_GenomeReads.fastq.gz -p CarIll_2_Nuclear_Unmerged_GenomeReads_1.fastq.gz CarIll_2_Nuclear_Unmerged_GenomeReads_2.fastq.gz -s CarIll_2_Nuclear_Merged_GenomeReads.fastq.gz -p CarIll_3_Nuclear_Unmerged_GenomeReads_1.fastq.gz CarIll_3_Nuclear_Unmerged_GenomeReads_2.fastq.gz -s CarIll_3_Nuclear_Merged_GenomeReads.fastq.gz -p CarIll_4_Nuclear_Unmerged_GenomeReads_1.fastq.gz CarIll_4_Nuclear_Unmerged_GenomeReads_2.fastq.gz -s CarIll_4_Nuclear_Merged_GenomeReads.fastq.gz -p CarIll_5_Nuclear_Unmerged_GenomeReads_1.fastq.gz CarIll_5_Nuclear_Unmerged_GenomeReads_2.fastq.gz -s CarIll_5_Nuclear_Merged_GenomeReads.fastq.gz -p CarLac_1_Nuclear_Unmerged_GenomeReads_1.fastq.gz CarLac_1_Nuclear_Unmerged_GenomeReads_2.fastq.gz -s CarLac_1_Nuclear_Merged_GenomeReads.fastq.gz -p CarLac_3_Nuclear_Unmerged_GenomeReads_1.fastq.gz CarLac_3_Nuclear_Unmerged_GenomeReads_2.fastq.gz -s CarLac_3_Nuclear_Merged_GenomeReads.fastq.gz -p CarMyr_1_Nuclear_Unmerged_GenomeReads_1.fastq.gz CarMyr_1_Nuclear_Unmerged_GenomeReads_2.fastq.gz -s CarMyr_1_Nuclear_Merged_GenomeReads.fastq.gz -p CarOva_1_Nuclear_Unmerged_GenomeReads_1.fastq.gz CarOva_1_Nuclear_Unmerged_GenomeReads_2.fastq.gz -s CarOva_1_Nuclear_Merged_GenomeReads.fastq.gz -p CarOva_2_Nuclear_Unmerged_GenomeReads_1.fastq.gz CarOva_2_Nuclear_Unmerged_GenomeReads_2.fastq.gz -s CarOva_2_Nuclear_Merged_GenomeReads.fastq.gz -p CarOva_3_Nuclear_Unmerged_GenomeReads_1.fastq.gz CarOva_3_Nuclear_Unmerged_GenomeReads_2.fastq.gz -s CarOva_3_Nuclear_Merged_GenomeReads.fastq.gz -p CarPalm_1_Nuclear_Unmerged_GenomeReads_1.fastq.gz CarPalm_1_Nuclear_Unmerged_GenomeReads_2.fastq.gz -s CarPalm_1_Nuclear_Merged_GenomeReads.fastq.gz -p CarPalm_2_Nuclear_Unmerged_GenomeReads_1.fastq.gz CarPalm_2_Nuclear_Unmerged_GenomeReads_2.fastq.gz -s CarPalm_2_Nuclear_Merged_GenomeReads.fastq.gz -o <BASE_DIR>/Composite/Ray_Nuclear_Carya
 ```
 
-3) **Composite Genome Processing**: The resulting contigs assembled by Ray are then prepped for mapping.  
-
-  - The Genome_SiteLengths.py script can be found in [**scripts/SISRS/Genome_SiteLengths.py**](scripts/SISRS/Genome_SiteLengths.py).
+3) **Composite Genome Processing**: The resulting contigs assembled by Ray are then prepped for mapping by creating Bowtie2 indexes and other SISRS-related files.  
+  - Genome_SiteLengths.py can be found in [**scripts/SISRS/Genome_SiteLengths.py**](scripts/SISRS/Genome_SiteLengths.py)  
 
 ```
-# Make a new folder for the composite genome
+# Make Composite Genome folder within Ray directory
+
 mkdir <BASE_DIR>/Composite/Ray_Nuclear_Carya/Composite_Genome
 cd <BASE_DIR>/Composite/Ray_Nuclear_Carya/Composite_Genome
 
-# Add SISRS_ to contigs
+# Add SISRS_ to Ray contigs
 rename.sh in=<BASE_DIR>/Composite/Ray_Nuclear_Carya/Contigs.fasta out=<BASE_DIR>/Composite/Ray_Nuclear_Carya/Composite_Genome/contigs.fa prefix=SISRS addprefix=t trd=t
 
-# Index contigs
 bowtie2-build contigs.fa contigs -p 20
 samtools faidx contigs.fa
 
-# Process Ray contig lengths
-python <BASE_DIR>/scripts/Genome_SiteLengths.py <BASE_DIR>/Composite/Ray_Nuclear_Carya/Composite_Genome
+python Genome_SiteLengths.py <BASE_DIR>/Composite/Ray_Nuclear_Carya/Composite_Genome
 
-# Generate BBMap stats
 stats.sh in=contigs.fa &> BBmap_Stats
-```
-
-4) **Mapping SISRS orthologs onto *C. illinoinensis* reference genome**: While no reference genome or annotation data was used in generating our datasets, we also wanted to get a sense of what we put together. To that end, we mapped SISRS orthologs against the pecan reference genome from NCBI (GCA_011037805.1_ASM1103780v1).  
-
-  - The Genome_Mapper.py script can be found in [**scripts/Reference_Genome_Mapping/Genome_Mapper.py**](scripts/Reference_Genome_Mapping/Genome_Mapper.py).
 
 ```
-# Map SISRS orthologs from C. illinoinensis (pooled) against reference genome
 
-bowtie2 -p 20 -x <DIR>/CarIll_Ref -f -U <DIR>/CarIll.fa -S CarIll.sam
+4) **Mapping SISRS orthologs onto *C. illinoinensis* reference genome**: While no reference genome or annotation data was used in generating our datasets, we also wanted to get a sense of what we put together. To that end, we mapped SISRS orthologs derived from the pooled *C. illinoinensis* samples against the pecan reference genome from NCBI (GCA_011037805.1_ASM1103780v1).  
+  - For the purposes of *this study*, we operated as if there was no reference genome, and all orthologs/sites were considered in the analysis.  
+  - Otherwise, this step provides a possible data filtration step (i.e. only consider SISRS orthologs that can be uniquely mapped onto the reference genome)  
+  - Genome_Mapper.py can be found in [**scripts/SISRS/Genome_Mapper.py**](scripts/SISRS/Genome_Mapper.py)  
 
-# Extract contigs that map uniquely
-
-samtools view -Su -@ 20 -F 4 CarIll.sam | samtools sort -@ 20 - -o <DIR>/CarIll_Temp.bam
-
-samtools view -@ 20 -H <DIR>/CarIll_Temp.bam > <DIR>/CarIll_Header.sam
-
-samtools view -@ 20 <DIR>/CarIll_Temp.bam | grep -v "XS:" | cat <DIR>/CarIll_Header.sam - | samtools view -@ 20 -b - > <DIR/CarIll.bam
-
-# Create genome mapping file
-
-samtools view <DIR>/CarIll.bam | awk 'BEGIN {OFS = "\t"} { print $1, $3, $4, $2, $6}' > <DIR>/CarIll_MapData.tsv
-
-cut -f1 <DIR>/CarIll_MapData.tsv | sort > <DIR>/Uniquely_Mapping_Contigs
-
-# Create a list of sites from the SISRS orthologs that could be uniquely mapped to the reference genome
-
-python <DIR>/Genome_Mapper.py <DIR>/CarIll_MapData.tsv
 ```
+# Map contigs
+bowtie2 -p 20 -x <DIR>/Reference_Genome/CarIll_Ref -f -U <DIR>/Reference_Genome/CarIll.fa -S CarIll.sam
 
+# Get uniquely mapping contigs
+samtools view -Su -@ 20 -F 4 CarIll.sam | samtools sort -@ 20 - -o <DIR>/Reference_Genome/CarIll_Temp.bam
+
+samtools view -@ 20 -H <DIR>/Reference_Genome/CarIll_Temp.bam > <DIR>/Reference_Genome/CarIll_Header.sam
+
+samtools view -@ 20 <DIR>/Reference_Genome/CarIll_Temp.bam | grep -v "XS:" | cat <DIR>/Reference_Genome/CarIll_Header.sam - | samtools view -@ 20 -b - > <DIR/Reference_Genome/CarIll.bam
+
+# Create genome map file
+samtools view <DIR>/Reference_Genome/CarIll.bam | awk 'BEGIN {OFS = "\t"} { print $1, $3, $4, $2, $6}' > <DIR>/Reference_Genome/CarIll_MapData.tsv
+
+cut -f1 <DIR>/Reference_Genome/CarIll_MapData.tsv | sort > <DIR>/Reference_Genome/Uniquely_Mapping_Contigs
+
+# Generate file with every base from composite genome
+python <DIR>/Reference_Genome/Genome_Mapper.py <DIR>/Reference_Genome/CarIll_MapData.tsv
+
+```
+  
 **Assembly Statistics**  
 
-Using reads pooled across 8 diploid species, We were able to assemble over 169Mb of nuclear ortholog data for the *Carya* group. While no reference genome was used in their construction, our assembly uniquely covers over 14% of the *C. illinoinensis* assembly, with over 93Mb of uniquely mapping sites. For the purposes of *this study*, we operated as if there was no reference genome, and all orthologs/sites were considered in the analysis.  
-
-  - In cases where reference genomes **do** exist, this step provides a possible data filtration step (i.e. only consider SISRS orthologs that can be uniquely mapped onto the reference genome)  
+Using reads pooled across 8 diploid species, We were able to assemble over 169Mb of nuclear ortholog data for the *Carya* group. While no reference genome was used in their construction, our assembly uniquely covers over 14% of the *C. illinoinensis* assembly, with over 93Mb of uniquely mapping sites. 
 
 |                                   |             |
 |-----------------------------------|-------------|
@@ -245,7 +227,7 @@ Using reads pooled across 8 diploid species, We were able to assemble over 169Mb
 | **Percent_Uniquely_Mapped_Bases** | 55.30%      |
 | **Percent_Reference_Genome**      | 14.36%      |
 
-### 05) **SISRS Fixed Allele Calling**  
+### 04) **SISRS Fixed Allele Calling**  
 All samples are compared to each other based on this shared composite genome. To generate sample- or species-specific ortholog data for our samples, the basic steps are:  
 
   1. Map reads from each sample onto the composite genome, only allowing uniquely mapping reads.  
@@ -261,6 +243,65 @@ For this study, we processed the following datasets to extract fixed sites:
   - Study *Carya* species samples and Companion samples pooled by species  (**Pooled**)  
   - Study *Carya* species samples individually 
   - Study *Carya* hybrid samples individually  
+
+**Mapping Template**  
+  - When files and folders are set up for SISRS, these mapping files are generated automatically using [**scripts/SISRS/SISRS_Script_Gen.py**](scripts/SISRS/SISRS_Script_Gen.py)  
+
+```
+# Generating mapping scripts using 20 processors, requiring 1 read of coverage, and 100% fixed alleles
+python SISRS_Script_Gen.py 20 1 1
+
+# Generating mapping scripts using 15 processors, requiring 3 read of coverage, and 90% fixed alleles (not run, provided as example)
+python SISRS_Script_Gen.py 15 3 0.9
+```
+
+This script will look for reads in the appropriate folders, swap out variable names based on data, and generate the following scripts (SLURM in this case) for running the mapping:  
+- Internal SISRS scripts can be found in [**scripts/SISRS/**](scripts/SISRS/)  
+
+```
+#!/bin/bash
+#SBATCH --job-name="TAXA"
+#SBATCH --time=96:00:00  # walltime limit (HH:MM:SS)
+#SBATCH --nodes=1   # number of nodes
+#SBATCH --ntasks-per-node=PROCESSORS   # processor core(s) per node 
+#SBATCH --mail-type=END,FAIL
+#SBATCH --output="out_TAXA_SISRS"
+#SBATCH --error="err_TAXA_SISRS"
+# LOAD MODULES, INSERT CODE, AND RUN YOUR PROGRAMS HERE
+cd $SLURM_SUBMIT_DIR
+
+bowtie2 -p PROCESSORS -N 1 --local -x BOWTIE2-INDEX -U READS | samtools view -Su -@ PROCESSORS -F 4 - | samtools sort -@ PROCESSORS - -o SISRS_DIR/TAXA/TAXA_Temp.bam
+
+samtools view -@ PROCESSORS -H SISRS_DIR/TAXA/TAXA_Temp.bam > SISRS_DIR/TAXA/TAXA_Header.sam
+
+samtools view -@ PROCESSORS SISRS_DIR/TAXA/TAXA_Temp.bam | grep -v "XS:" | cat SISRS_DIR/TAXA/TAXA_Header.sam - | samtools view -@ PROCESSORS -b - > SISRS_DIR/TAXA/TAXA.bam
+
+rm SISRS_DIR/TAXA/TAXA_Temp.bam
+rm SISRS_DIR/TAXA/TAXA_Header.sam
+
+samtools mpileup -f COMPOSITE_GENOME SISRS_DIR/TAXA/TAXA.bam > SISRS_DIR/TAXA/TAXA.pileups
+
+python SCRIPT_DIR/specific_genome.py SISRS_DIR/TAXA COMPOSITE_GENOME
+
+samtools faidx SISRS_DIR/TAXA/contigs.fa
+bowtie2-build SISRS_DIR/TAXA/contigs.fa SISRS_DIR/TAXA/contigs -p PROCESSORS
+
+bowtie2 -p PROCESSORS -N 1 --local -x SISRS_DIR/TAXA/contigs -U READS | samtools view -Su -@ PROCESSORS -F 4 - | samtools sort -@ PROCESSORS - -o SISRS_DIR/TAXA/TAXA_Temp.bam
+
+samtools view -@ PROCESSORS -H SISRS_DIR/TAXA/TAXA_Temp.bam > SISRS_DIR/TAXA/TAXA_Header.sam
+samtools view -@ PROCESSORS SISRS_DIR/TAXA/TAXA_Temp.bam | grep -v "XS:" | cat SISRS_DIR/TAXA/TAXA_Header.sam - | samtools view -@ PROCESSORS -b - > SISRS_DIR/TAXA/TAXA.bam
+
+rm SISRS_DIR/TAXA/TAXA_Temp.bam
+rm SISRS_DIR/TAXA/TAXA_Header.sam
+
+samtools index SISRS_DIR/TAXA/TAXA.bam
+
+samtools mpileup -f COMPOSITE_GENOME SISRS_DIR/TAXA/TAXA.bam > SISRS_DIR/TAXA/TAXA.pileups
+
+python SCRIPT_DIR/get_pruned_dict.py SISRS_DIR/TAXA COMPOSITE_DIR MINREAD THRESHOLD
+```
+
+**SISRS Mapping Results**  
 
 | **Study_ID** | **Dataset** | **Species_or_Hybrid** | **Sample_Type** | **Called_Sites** | **Percent_Composite_Sites** |
 |--------------|-------------|-----------------------|-----------------|------------------|-----------------------------|
@@ -324,3 +365,8 @@ For this study, we processed the following datasets to extract fixed sites:
 | xlc_3        | Study       | Hybrid                | Specimen        | 42,975,150       | 25.4%                       |
 | xlc_4        | Study       | Hybrid                | Specimen        | 47,965,052       | 28.4%                       |
 | xnuss_1      | Study       | Hybrid                | Specimen        | 29,001,395       | 17.1%                       |
+
+### 05) **Identifying species-informative SNPs**  
+In order to classify our study specimens, we first needed to generate a set of species-identifying SNPs from the Companion data. To do this, after SISRS mapping,   
+
+
