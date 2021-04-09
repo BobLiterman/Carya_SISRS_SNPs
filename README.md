@@ -387,51 +387,24 @@ python filter_nexus_for_missing.py $PWD/alignment_pi.nex 0
 
 ```
 
-**Output**  
+**Output (Singleton Sites)**  
 
-```
-# Study Species
+| **Dataset** | **Singleton_Sites_Gapless** | **Singleton_Sites_Gaps** | **Total_Singleton_Sites** | **Mapped_Singleton_Sites** | **Percent_Gap** | **Percent_Mapped** |
+|-------------|-----------------------------|--------------------------|---------------------------|----------------------------|-----------------|--------------------|
+| Study       | 183,302                     | 8,005                    | 191,307                   | 143,200                    | 4.18%           | 75%                |
+| Companion   | 1,275,561                   | 62,408                   | 1,337,969                 | 1,123,826                  | 4.66%           | 84%                |
+| Pooled      | 1,356,809                   | 73,030                   | 1,429,839                 | 1,181,980                  | 5.11%           | 83%                |
 
-8806640 total variable sites [alignment.nex]
-7612680 variable sites are singletons (Invariant except for singletons) [alignment_singletons.nex]
-47152 variable sites contain singletons (Variable, but with 1 or more singletons) [alignment_pi_singletons.nex]
-1146808 variable sites contain no singletons (Variable, parsimony-informative [alignment_pi.nex]
-1144787 variable sites are biallelic, parsimony-informative sites [alignment_bi.nex]
+**Output (Parsimony-informative Sites)**  
 
-With 0 taxa allowed to be missing, and with gaps allowed, 7612680 sites from alignment_singletons.nex (6 allowed missing) are reduced to **191307** sites (7421373 sites or 97.49% lost)
-With 0 taxa allowed to be missing, and with no gaps allowed, 7612680 sites from alignment_singletons.nex (6 allowed missing) are reduced to **183302** sites (7429378 sites or 97.59% lost)
+| **Dataset** | **PI_Sites_Gapless** | **PI_Sites_Gaps** | **Total_PI_Sites** | **Mapped_PI_Sites** | **Percent_Gap** | **Percent_Mapped** |
+|-------------|----------------------|-------------------|--------------------|---------------------|-----------------|--------------------|
+| Study       | 35,004               | 885               | 35,889             | 29,340              | 2.47%           | 82%                |
+| Companion   | 311,893              | 9,263             | 321,156            | 273,047             | 2.88%           | 85%                |
+| Pooled      | 328,325              | 10,582            | 338,907            | 282,950             | 3.12%           | 83%                |
 
-With 0 taxa allowed to be missing, and with gaps allowed, 1146808 sites from Study_Taxa_pi.nex (6 allowed missing) are reduced to **35889** sites (1110919 sites or 96.87% lost)
-With 0 taxa allowed to be missing, and with no gaps allowed, 1146808 sites from Study_Taxa_pi.nex (6 allowed missing) are reduced to **35004** sites (1111804 sites or 96.95% lost)
-
-# Companion Species
-
-12241724 total variable sites [alignment.nex]
-10131073 variable sites are singletons (Invariant except for singletons) [alignment_singletons.nex]
-120856 variable sites contain singletons (Variable, but with 1 or more singletons) [alignment_pi_singletons.nex]
-1989795 variable sites contain no singletons (Variable, parsimony-informative [alignment_pi.nex]
-1983007 variable sites are biallelic, parsimony-informative sites [alignment_bi.nex]
-
-With 0 taxa allowed to be missing, and with gaps allowed, 10131073 sites from alignment_singletons.nex (6 allowed missing) are reduced to **1337969** sites (8793104 sites or 86.79% lost)
-With 0 taxa allowed to be missing, and with no gaps allowed, 10131073 sites from alignment_singletons.nex (6 allowed missing) are reduced to **1275561** sites (8855512 sites or 87.41% lost)
-
-With 0 taxa allowed to be missing, and with gaps allowed, 1989795 sites from Companion_Taxa_pi.nex (6 allowed missing) are reduced to **321156** sites (1668639 sites or 83.86% lost)
-With 0 taxa allowed to be missing, and with no gaps allowed, 1989795 sites from Companion_Taxa_pi.nex (6 allowed missing) are reduced to **311893** sites (1677902 sites or 84.33% lost)
-
-# Pooled Species
-
-12142835 total variable sites [alignment.nex]
-9994593 variable sites are singletons (Invariant except for singletons) [alignment_singletons.nex]
-123165 variable sites contain singletons (Variable, but with 1 or more singletons) [alignment_pi_singletons.nex]
-2025077 variable sites contain no singletons (Variable, parsimony-informative [alignment_pi.nex]
-2017748 variable sites are biallelic, parsimony-informative sites [alignment_bi.nex]
-
-With 0 taxa allowed to be missing, and with gaps allowed, 9994593 sites from alignment_singletons.nex (6 allowed missing) are reduced to **1429839** sites (8564754 sites or 85.69% lost)
-With 0 taxa allowed to be missing, and with no gaps allowed, 9994593 sites from alignment_singletons.nex (6 allowed missing) are reduced to **1356809** sites (8637784 sites or 86.42% lost)
-
-With 0 taxa allowed to be missing, and with gaps allowed, 2025077 sites from Pooled_Taxa_pi.nex (6 allowed missing) are reduced to **338907** sites (1686170 sites or 83.26% lost)
-With 0 taxa allowed to be missing, and with no gaps allowed, 2025077 sites from Pooled_Taxa_pi.nex (6 allowed missing) are reduced to **328325** sites (1696752 sites or 83.79% lost)
-```
-
+- Over 3/4 of all species-identifying SNPs or PI sites came from sites that could be uniquely mapped back to the *C. illinoinensis* reference assembly, providing solid support for SISRS orthologs as largely single-copy orthologs (among diploids).  
+- Over 1M putatively species-identifying SNPs were identified when using all data combined.  
+- Genome skim data alone was sufficient to generate over 190K SNPs.  
 
 
