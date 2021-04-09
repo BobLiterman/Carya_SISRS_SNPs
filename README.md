@@ -220,11 +220,12 @@ cut -f1 <DIR>/CarIll_MapData.tsv | sort > <DIR>/Uniquely_Mapping_Contigs
 
 python <DIR>/Genome_Mapper.py <DIR>/CarIll_MapData.tsv
 ```
-### Assembly Statistics
+
+**Assembly Statistics**  
 
 Using reads pooled across 8 diploid species, We were able to assemble over 169Mb of nuclear ortholog data for the *Carya* group. While no reference genome was used in their construction, our assembly uniquely covers over 14% of the *C. illinoinensis* assembly, with over 93Mb of uniquely mapping sites. For the purposes of *this study*, we operated as if there was no reference genome, and all orthologs/sites were considered in the analysis.  
 
-- In cases where reference genomes **do** exist, this step provides a possible data filtration step (i.e. only consider SISRS orthologs that can be uniquely mapped onto the reference genome)  
+    - In cases where reference genomes **do** exist, this step provides a possible data filtration step (i.e. only consider SISRS orthologs that can be uniquely mapped onto the reference genome)  
 
 |                                   |             |
 |-----------------------------------|-------------|
@@ -246,18 +247,18 @@ Using reads pooled across 8 diploid species, We were able to assemble over 169Mb
 
 5) **SISRS Fixed Allele Calling**: All samples are compared to each other based on this shared composite genome. To generate sample- or species-specific ortholog data for our samples, the basic steps are:  
 
-- Map reads from each sample onto the composite genome, only allowing uniquely mapping reads.  
-- After mapping, identify homozygous sites (i.e. sites with a single allele) and replace all other bases with 'N'  
-- In this way, each sample has the same list of sites (every possible site in the composite genome), but the bases themselves are based on the sample data, and are specific  
-- **Note**: Indels are taken into account, and gap data can be included or excluded in analyses later  
+1. Map reads from each sample onto the composite genome, only allowing uniquely mapping reads.  
+2. After mapping, identify homozygous sites (i.e. sites with a single allele) and replace all other bases with 'N'  
+3. In this way, each sample has the same list of sites (every possible site in the composite genome), but the bases themselves are based on the sample data, and are specific  
+    - **Note**: Indels are taken into account, and gap data can be included or excluded in analyses later  
 
 For this study, we processed the following datasets to extract fixed sites:  
 
-- Study *Carya* species samples pooled by species (**Study**)  
-- Companion *Carya* samples individually (**Companion**)  
-- Study *Carya* species samples and Companion samples pooled by species  (**Pooled**)  
-- Study *Carya* species samples individually 
-- Study *Carya* hybrid samples individually  
+    - Study *Carya* species samples pooled by species (**Study**)  
+    - Companion *Carya* samples individually (**Companion**)  
+    - Study *Carya* species samples and Companion samples pooled by species  (**Pooled**)  
+    - Study *Carya* species samples individually 
+    - Study *Carya* hybrid samples individually  
 
 | **Study_ID** | **Dataset** | **Species_or_Hybrid** | **Sample_Type** | **Called_Sites** | **Percent_Composite_Sites** |
 |--------------|-------------|-----------------------|-----------------|------------------|-----------------------------|
