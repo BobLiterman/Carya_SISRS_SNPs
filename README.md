@@ -222,6 +222,10 @@ python <DIR>/Genome_Mapper.py <DIR>/CarIll_MapData.tsv
 ```
 ### Assembly Statistics
 
+Using reads pooled across 8 diploid species, We were able to assemble over 169Mb of nuclear ortholog data for the *Carya* group. While no reference genome was used in their construction, our assembly uniquely covers over 14% of the *C. illinoinensis* assembly, with over 93Mb of uniquely mapping sites. For the purposes of *this study*, we operated as if there was no reference genome, and all orthologs/sites were considered in the analysis.  
+
+- In cases where reference genomes **do** exist, this step provides a possible data filtration step (i.e. only consider SISRS orthologs that can be uniquely mapped onto the reference genome)  
+
 |                                   |             |
 |-----------------------------------|-------------|
 | **Contig_Count**                  | 820,113     |
@@ -239,3 +243,81 @@ python <DIR>/Genome_Mapper.py <DIR>/CarIll_MapData.tsv
 | **Percent_Mapped_Bases**          | 59.43%      |
 | **Percent_Uniquely_Mapped_Bases** | 55.30%      |
 | **Percent_Reference_Genome**      | 14.36%      |
+
+5) **SISRS Fixed Allele Calling**: All samples are compared to each other based on this shared composite genome. To generate sample- or species-specific ortholog data for our samples, the basic steps are:  
+
+- Map reads from each sample onto the composite genome, only allowing uniquely mapping reads.  
+- After mapping, identify homozygous sites (i.e. sites with a single allele) and replace all other bases with 'N'  
+- In this way, each sample has the same list of sites (every possible site in the composite genome), but the bases themselves are based on the sample data, and are specific  
+- **Note**: Indels are taken into account, and gap data can be included or excluded in analyses later  
+
+For this study, we processed the following datasets to extract fixed sites:  
+
+- Study *Carya* species samples pooled by species (**Study**)  
+- Companion *Carya* samples individually (**Companion**)  
+- Study *Carya* species samples and Companion samples pooled by species  (**Pooled**)  
+- Study *Carya* species samples individually 
+- Study *Carya* hybrid samples individually  
+
+| **Study_ID** | **Dataset** | **Species_or_Hybrid** | **Sample_Type** | **Called_Sites** | **Percent_Composite_Sites** |
+|--------------|-------------|-----------------------|-----------------|------------------|-----------------------------|
+| CarAqu       | Study       | Species               | Species         | 78,883,540       | 46.6%                       |
+| CarCat       | Study       | Species               | Species         | 81,598,246       | 48.3%                       |
+| CarCor       | Study       | Species               | Species         | 78,723,985       | 46.6%                       |
+| CarIll       | Study       | Species               | Species         | 81,419,381       | 48.1%                       |
+| CarLac       | Study       | Species               | Species         | 54,053,166       | 32.0%                       |
+| CarMyr       | Study       | Species               | Species         | 47,699,127       | 28.2%                       |
+| CarOva       | Study       | Species               | Species         | 66,670,456       | 39.4%                       |
+| CarPalm      | Study       | Species               | Species         | 58,796,330       | 34.8%                       |
+| CarAqu       | Companion   | Species               | Species         | 102,740,732      | 60.8%                       |
+| CarCat       | Companion   | Species               | Species         | 89,500,305       | 52.9%                       |
+| CarCor       | Companion   | Species               | Species         | 104,132,010      | 61.6%                       |
+| CarIll       | Companion   | Species               | Species         | 95,494,653       | 56.5%                       |
+| CarLac       | Companion   | Species               | Species         | 100,507,995      | 59.4%                       |
+| CarMyr       | Companion   | Species               | Species         | 99,857,238       | 59.0%                       |
+| CarOva       | Companion   | Species               | Species         | 101,979,317      | 60.3%                       |
+| CarPalm      | Companion   | Species               | Species         | 99,019,113       | 58.6%                       |
+| CarAqu       | Pooled      | Species               | Species         | 106,312,476      | 62.9%                       |
+| CarCat       | Pooled      | Species               | Species         | 100,379,469      | 59.4%                       |
+| CarCor       | Pooled      | Species               | Species         | 107,571,635      | 63.6%                       |
+| CarIll       | Pooled      | Species               | Species         | 103,560,585      | 61.2%                       |
+| CarLac       | Pooled      | Species               | Species         | 103,287,824      | 61.1%                       |
+| CarMyr       | Pooled      | Species               | Species         | 101,353,256      | 59.9%                       |
+| CarOva       | Pooled      | Species               | Species         | 105,380,284      | 62.3%                       |
+| CarPalm      | Pooled      | Species               | Species         | 114,265,581      | 67.6%                       |
+| CarAqu_1     | Study       | Species               | Specimen        | 55,123,380       | 32.6%                       |
+| CarAqu_2     | Study       | Species               | Specimen        | 36,663,393       | 21.7%                       |
+| CarAqu_3     | Study       | Species               | Specimen        | 38,624,370       | 22.8%                       |
+| CarCat_1     | Study       | Species               | Specimen        | 67,102,296       | 39.7%                       |
+| CarCat_2     | Study       | Species               | Specimen        | 54,822,100       | 32.4%                       |
+| CarCor_2     | Study       | Species               | Specimen        | 41,301,488       | 24.4%                       |
+| CarCor_3     | Study       | Species               | Specimen        | 34,956,176       | 20.7%                       |
+| CarCor_4     | Study       | Species               | Specimen        | 27,579,926       | 16.3%                       |
+| CarCor_5     | Study       | Species               | Specimen        | 25,449,675       | 15.0%                       |
+| CarCor_6     | Study       | Species               | Specimen        | 23,380,565       | 13.8%                       |
+| CarIll_1     | Study       | Species               | Specimen        | 39,880,661       | 23.6%                       |
+| CarIll_2     | Study       | Species               | Specimen        | 45,129,367       | 26.7%                       |
+| CarIll_3     | Study       | Species               | Specimen        | 31,973,716       | 18.9%                       |
+| CarIll_4     | Study       | Species               | Specimen        | 23,212,232       | 13.7%                       |
+| CarIll_5     | Study       | Species               | Specimen        | 27,154,874       | 16.1%                       |
+| CarLac_1     | Study       | Species               | Specimen        | 41,535,976       | 24.6%                       |
+| CarLac_3     | Study       | Species               | Specimen        | 24,770,649       | 14.6%                       |
+| CarMyr_1A    | Study       | Species               | Specimen        | 47,699,127       | 28.2%                       |
+| CarOva_1     | Study       | Species               | Specimen        | 35,685,797       | 21.1%                       |
+| CarOva_2     | Study       | Species               | Specimen        | 37,062,956       | 21.9%                       |
+| CarOva_3     | Study       | Species               | Specimen        | 28,775,777       | 17.0%                       |
+| CarPalm_1    | Study       | Species               | Specimen        | 27,039,653       | 16.0%                       |
+| CarPalm_2    | Study       | Species               | Specimen        | 42,001,941       | 24.8%                       |
+| myrxill_1    | Study       | Hybrid                | Specimen        | 41,960,949       | 24.8%                       |
+| xbr_1        | Study       | Hybrid                | Specimen        | 47,958,913       | 28.4%                       |
+| xbr_2        | Study       | Hybrid                | Specimen        | 37,674,347       | 22.3%                       |
+| xbr_3        | Study       | Hybrid                | Specimen        | 43,310,581       | 25.6%                       |
+| xbrl_1       | Study       | Hybrid                | Specimen        | 46,717,915       | 27.6%                       |
+| xila_1       | Study       | Hybrid                | Specimen        | 49,179,645       | 29.1%                       |
+| xila_2       | Study       | Hybrid                | Specimen        | 39,731,275       | 23.5%                       |
+| xio_1        | Study       | Hybrid                | Specimen        | 41,097,533       | 24.3%                       |
+| xlc_1        | Study       | Hybrid                | Specimen        | 50,107,704       | 29.6%                       |
+| xlc_2        | Study       | Hybrid                | Specimen        | 32,534,027       | 19.2%                       |
+| xlc_3        | Study       | Hybrid                | Specimen        | 42,975,150       | 25.4%                       |
+| xlc_4        | Study       | Hybrid                | Specimen        | 47,965,052       | 28.4%                       |
+| xnuss_1      | Study       | Hybrid                | Specimen        | 29,001,395       | 17.1%                       |
