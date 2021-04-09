@@ -245,11 +245,14 @@ Using reads pooled across 8 diploid species, We were able to assemble over 169Mb
 | **Percent_Uniquely_Mapped_Bases** | 55.30%      |
 | **Percent_Reference_Genome**      | 14.36%      |
 
-05) **SISRS Fixed Allele Calling**: All samples are compared to each other based on this shared composite genome. To generate sample- or species-specific ortholog data for our samples, the basic steps are:  
+### 05) **SISRS Fixed Allele Calling**  
+
+All samples are compared to each other based on this shared composite genome. To generate sample- or species-specific ortholog data for our samples, the basic steps are:  
 
     1. Map reads from each sample onto the composite genome, only allowing uniquely mapping reads.  
-    2. After mapping, identify homozygous sites (i.e. sites with a single allele) and replace all other bases with 'N'  
-    3. In this way, each sample has the same list of sites (every possible site in the composite genome), but the bases themselves are based on the sample data, and are specific  
+    2. After mapping, identify homozygous/fixed sites (i.e. sites with a single allele) and replace all other bases with 'N'  
+        - By default, SISRS requires three reads of coverage to call a site, but for this study, we only required a single read  
+    3. In this way, each sample has the same list of sites (every possible site in the composite genome), but the bases themselves are based on the sample data  
         - **Note**: Indels are taken into account, and gap data can be included or excluded in analyses later  
 
 For this study, we processed the following datasets to extract fixed sites:  
