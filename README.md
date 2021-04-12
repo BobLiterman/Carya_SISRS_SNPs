@@ -406,5 +406,41 @@ python filter_nexus_for_missing.py $PWD/alignment_pi.nex 0
 - Over 3/4 of all species-identifying SNPs or PI sites came from sites that could be uniquely mapped back to the *C. illinoinensis* reference assembly, providing solid support for SISRS orthologs as largely single-copy orthologs (among diploids).  
 - Over 1M putatively species-identifying SNPs were identified when using all data combined.  
 - Genome skim data alone was sufficient to generate over 190K SNPs.  
+- The code to analyze this data can be found in **Section 01** of [**scripts/R_Analysis/Carya_ManuScript.R**](scripts/R_Analysis/Carya_ManuScript.R)  
 
+### 06) **Phylogeny of *Carya* Diploids**  
 
+Using the gapless alignments of parsimony-informative sites, we used IQ-Tree v.1.6.7 (http://www.iqtree.org/) to infer maximum-likelihood trees for the group. All datasets resulted in a single topology (below), which was concordant with findings from [**Huang et al. 2019**](https://academic.oup.com/gigascience/article/8/5/giz036/5484800). Because tetraploids were not included in this analysis (pipeline development ongoing), we place tetraploids on this tree based on their placement in Huang et al. 2019. 
+
+![alt text](Images/Phylogeny.png)
+
+### 07) **Classifying Study *Carya* based on Companion Data SNPs**  
+
+Based on the species-defining SNPs derived from the Companion Data samples, we classified each of our *Carya* species samples based on their relative SNP proportions. In order to generate the necessary classification data for this manuscript, we created an alignment including each *Carya* species sample, along with all Companion Data samples.  
+
+```
+# Generate alignment of all SISRS sites
+python Output_SISRS.py
+
+# Filter sites with parsimony-informative variation down to those sites with no missing data
+python filter_nexus_for_missing.py $PWD/alignment_pi.nex 0
+
+```
+
+The resulting alignment will include all sites that are parsimony-informative (i.e. NO singletons). In this way, the only sites that survive to the final classification step are:  
+
+1. Sites that have fixed alleles in all Companion Data samples...  
+2. ...where variation among Companion samples is singleton in nature for single species (i.e. specieis-informative SNPs)...  
+3. ...and have fixed allele coverage in the test sample (i.e. test sample sites that overlap with species-identifying SNPs)  
+
+The code to analyze this data can be found in **Section 02** of [**scripts/R_Analysis/Carya_ManuScript.R**](scripts/R_Analysis/Carya_ManuScript.R)  
+
+**Classification Results**  
+
+![alt text](Images/GH_Sample_Classification.png)  
+
+- For each putative species-identifying SNP, the base information for each sample was called (e.g. A,C,T,G,-), and that base and sample were matched with the corresponding Companion reference sample with the same base.  
+- For each sample, the highest proportion of SNPs derived from the correct species of record.  
+- For most samples, over 90% of SNPs matched the correct reference species.  
+- For samples of both *Carya laciniosa* and *Carya ovata* the highest proportion of SNPs matched the correct species, **but** a significantly large second of SNPs matched with the other species.  
+  - Aside from more typical explanations like regular introgression throughout diversification, it is worth noting that these species are sister to the allotetraploid *Carya*, and that these findings could reflect evidence that like that group, these species also dabbled in genomic merging, but reverted back to a diploid state, albeit quite mixed up.  
