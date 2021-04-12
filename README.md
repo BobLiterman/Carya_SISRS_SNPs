@@ -466,4 +466,11 @@ The resulting alignment will include all sites that are parsimony-informative (i
 ### 08) **Classifying *Carya* hybrids based on Pooled Data SNPs**  
 Just as for the *Carya* species samples, we classified the hybrid samples based on SNPs, but these SNPs were derived after pooling the study and Companion data.  
 
+- For all crosses between *C. illinoinensis* and another diploid *Carya*, hybrid SNP analysis revealed that the two highest proportions of SNPs from each sample derived from one of the two putative parental species. Circles with color denote significant SNP enrichment.   
+- Fewer total SNPs for *C. laciniosa* and *C. ovata* result in fewer detected SNPs in those hybrids, but results were significant regardless. 
+
 ![alt text](Images/Carya_Crosses.png)  
+
+- For crosses where one parent was a putative hybrid, we detect no parental hybridity.  
+
+![alt text](Images/Hybrid_Crosses.png)  
