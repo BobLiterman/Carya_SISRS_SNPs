@@ -395,6 +395,17 @@ python filter_nexus_for_missing.py $PWD/alignment_pi.nex 0
 | Companion   | 1,275,561                   | 62,408                   | 1,337,969                 | 1,123,826                  | 4.66%           | 84%                |
 | Pooled      | 1,356,809                   | 73,030                   | 1,429,839                 | 1,181,980                  | 5.11%           | 83%                |
 
+| **Species**        | **Study** | **Companion** | **Pooled** |
+|--------------------|-----------|---------------|------------|
+| C. cathayensis     | 59,964    | 476,270       | 541,793    |
+| C. palmeri         | 26,771    | 176,340       | 199,589    |
+| C. myristiciformis | 25,055    | 150,861       | 154,369    |
+| C. cordiformis     | 18,091    | 147,473       | 151,310    |
+| C. aquatica        | 17,762    | 138,387       | 142,994    |
+| C. illinoinensis   | 15,006    | 120,500       | 117,664    |
+| C. laciniosa       | 14,969    | 54,934        | 53,099     |
+| C. ovata           | 10,497    | 46,649        | 41,961     |
+
 **Output (Parsimony-informative Sites)**  
 
 | **Dataset** | **PI_Sites_Gapless** | **PI_Sites_Gaps** | **Total_PI_Sites** | **Mapped_PI_Sites** | **Percent_Gap** | **Percent_Mapped** |
@@ -403,6 +414,7 @@ python filter_nexus_for_missing.py $PWD/alignment_pi.nex 0
 | Companion   | 311,893              | 9,263             | 321,156            | 273,047             | 2.88%           | 85%                |
 | Pooled      | 328,325              | 10,582            | 338,907            | 282,950             | 3.12%           | 83%                |
 
+
 - Over 3/4 of all species-identifying SNPs or PI sites came from sites that could be uniquely mapped back to the *C. illinoinensis* reference assembly, providing solid support for SISRS orthologs as largely single-copy orthologs (among diploids).  
 - Over 1M putatively species-identifying SNPs were identified when using all data combined.  
 - Genome skim data alone was sufficient to generate over 190K SNPs.  
@@ -410,12 +422,18 @@ python filter_nexus_for_missing.py $PWD/alignment_pi.nex 0
 
 ### 06) **Phylogeny of *Carya* Diploids**  
 
-Using the gapless alignments of parsimony-informative sites, we used IQ-Tree v.1.6.7 (http://www.iqtree.org/) to infer maximum-likelihood trees for the group. All datasets resulted in a single topology (below), which was concordant with findings from [**Huang et al. 2019**](https://academic.oup.com/gigascience/article/8/5/giz036/5484800). Because tetraploids were not included in this analysis (pipeline development ongoing), we place tetraploids on this tree based on their placement in Huang et al. 2019. 
+Using the gapless alignments of parsimony-informative sites, we used IQ-Tree v.1.6.7 (http://www.iqtree.org/) to infer maximum-likelihood trees for the group. All datasets resulted in a single topology (below), which was concordant with findings from [**Huang et al. 2019**](https://academic.oup.com/gigascience/article/8/5/giz036/5484800). Because tetraploids were not included in this analysis (pipeline development ongoing), we place tetraploids on this tree based on their placement in Huang et al. 2019. IQ-Tree was run as:  
+
+```
+iqtree -nt AUTO -s <DATASET>_pi_m0_nogap.phylip-relaxed -m MFP -bb 5000 -pre <DATASET>
+```
+
+- Alignments can be found in [**output/Phylogenies/Alignments**](output/Phylogenies/Alignments)  
+- IQ-Tree treefiles can be found in [**output/Phylogenies/Trees**](output/Phylogenies/Trees)  
 
 <img src="Images/Phylogeny.png" alt="drawing" width="400"/>
 
 ### 07) **Classifying Study *Carya* based on Companion Data SNPs**  
-
 Based on the species-defining SNPs derived from the Companion Data samples, we classified each of our *Carya* species samples based on their relative SNP proportions. In order to generate the necessary classification data for this manuscript, we created an alignment including each *Carya* species sample, along with all Companion Data samples.  
 
 ```
@@ -433,7 +451,8 @@ The resulting alignment will include all sites that are parsimony-informative (i
 2. ...where variation among Companion samples is singleton in nature for single species (i.e. specieis-informative SNPs)...  
 3. ...and have fixed allele coverage in the test sample (i.e. test sample sites that overlap with species-identifying SNPs)  
 
-The code to analyze this data can be found in **Section 02** of [**scripts/R_Analysis/Carya_ManuScript.R**](scripts/R_Analysis/Carya_ManuScript.R)  
+- The code to analyze this data can be found in **Section 02** of [**scripts/R_Analysis/Carya_ManuScript.R**](scripts/R_Analysis/Carya_ManuScript.R)  
+- Alignments can be found in [**output/Classifier/Species**](output/Classifier/Species)  
 
 **Classification Results**  
 
@@ -443,4 +462,8 @@ The code to analyze this data can be found in **Section 02** of [**scripts/R_Ana
 - For each sample, the highest proportion of SNPs derived from the correct species of record.  
 - For most samples, over 90% of SNPs matched the correct reference species.  
 - For samples of both *Carya laciniosa* and *Carya ovata* the highest proportion of SNPs matched the correct species, **but** a significantly large second of SNPs matched with the other species.  
-  - Aside from more typical explanations like regular introgression throughout diversification, it is worth noting that these species are sister to the allotetraploid *Carya*, and that these findings could reflect evidence that like that group, these species also dabbled in genomic merging, but reverted back to a diploid state, albeit quite mixed up.  
+
+### 08) **Classifying *Carya* hybrids based on Pooled Data SNPs**  
+Just as for the *Carya* species samples, we classified the hybrid samples based on SNPs, but these SNPs were derived after pooling the study and Companion data.  
+
+![alt text](Images/Carya_Crosses.png)  
