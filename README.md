@@ -477,7 +477,7 @@ For all crosses between *C. illinoinensis* and another diploid *Carya*, hybrid S
 - Fewer total SNPs for *C. laciniosa* and *C. ovata* result in fewer detected SNPs in those hybrids, but results were significant.  
 - Crosses between *C. illinoinensis* and *C. aquatica* display a wider range of SNP ratios, as opposed to the ~50:50 ratios of cross with *C. cordiformis*, *C. myristiciformis*.  
 
-- For crosses where one parent was a putative hybrid, we detect no parental hybridity. 
+For crosses where one parent was a putative hybrid, we detect no parental hybridity. 
 
 ![alt text](Images/Hybrid_Crosses.png)  
 
