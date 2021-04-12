@@ -462,19 +462,25 @@ The resulting alignment will include all sites that are parsimony-informative (i
 - For each sample, the highest proportion of SNPs derived from the correct species of record.  
 - For most samples, over 90% of SNPs matched the correct reference species.  
 - For samples of both *Carya laciniosa* and *Carya ovata* the highest proportion of SNPs matched the correct species, **but** a significantly large second of SNPs matched with the other species.  
+- Samples could be correctly identified even when reads were subsampled down to 0.01X coverage orior to classification (7.5Mb of WGS data)  
 
 ### 08) **Classifying *Carya* hybrids based on Pooled Data SNPs**  
 Just as for the *Carya* species samples, we classified the hybrid samples based on SNPs, but these SNPs were derived after pooling the study and Companion data.  
 
-- For all crosses between *C. illinoinensis* and another diploid *Carya*, hybrid SNP analysis revealed that the two highest proportions of SNPs from each sample derived from one of the two putative parental species. Circles with color denote significant SNP enrichment.   
-- Fewer total SNPs for *C. laciniosa* and *C. ovata* result in fewer detected SNPs in those hybrids, but results were significant.  
-- Crosses between *C. illinoinensis* and *C. aquatica* display a wider range of SNP ratios, as opposed to the ~50:50 ratios of cross with *C. cordiformis*, *C. myristiciformis*.  
+- The code to analyze this data can be found in **Section 04** of [**scripts/R_Analysis/Carya_ManuScript.R**](scripts/R_Analysis/Carya_ManuScript.R)  
+- Alignments can be found in [**output/Classifier/Hybrids**](output/Classifier/Hybrids)  
+
+For all crosses between *C. illinoinensis* and another diploid *Carya*, hybrid SNP analysis revealed that the two highest proportions of SNPs from each sample derived from one of the two putative parental species. Circles with color denote significant SNP enrichment.   
 
 ![alt text](Images/Carya_Crosses.png)  
 
-- For crosses where one parent was a putative hybrid, we detect no parental hybridity.  
-- Top: No *C. cordiformis* signal detected in a putative cross involving *Carya x brownii* (*C. illinoinensis* x *C. cordiformis*). Sample appears to be *C. illinoinensis* x *C. laciniosa* (i.e. *Carya x nussbaumeri*)  
-- Bottom: No *C. cordiformis* or *C. ovata* signal detected in putative crosses involving *Carya x laneyi* (*C. illinoinensis*/*C. ovata*/*C. cordiformis*). Samples both appear to be *C. illinoinensis*.  
+- Fewer total SNPs for *C. laciniosa* and *C. ovata* result in fewer detected SNPs in those hybrids, but results were significant.  
+- Crosses between *C. illinoinensis* and *C. aquatica* display a wider range of SNP ratios, as opposed to the ~50:50 ratios of cross with *C. cordiformis*, *C. myristiciformis*.  
+
+- For crosses where one parent was a putative hybrid, we detect no parental hybridity. 
 
 ![alt text](Images/Hybrid_Crosses.png)  
+
+- **Top**: No *C. cordiformis* signal detected in a putative cross involving *Carya x brownii* (*C. illinoinensis* x *C. cordiformis*). Sample appears to be *C. illinoinensis* x *C. laciniosa* (i.e. *Carya x nussbaumeri*)  
+- **Bottom**: No *C. cordiformis* or *C. ovata* signal detected in putative crosses involving *Carya x laneyi* (*C. illinoinensis*/*C. ovata*/*C. cordiformis*). Samples both appear to be *C. illinoinensis*.  
 
