@@ -2,12 +2,12 @@
 ## Robert Literman, Brittany M. Ott, Jun Wen, LJ Grauke, Rachel Schwartz, Sara M. Handy
 
 ## Pre-Note
-This is a walkthrough of this manuscript, and is not meant as step-by-step code/script instructions. To run SISRS and generate orthologs and singletons, you can follow the SISRS walkthrough (). After you have done that, you can jump back in here at **Step X** to get a sense of the data analysis steps. A user-friendly version of this **entire** pipeline is currently under development, but all scripts are provided here.  
+This is a walkthrough of this manuscript, and is not meant as step-by-step code/script instructions. To run SISRS and generate orthologs and singletons, you can follow the [**SISRS walkthrough**](https://github.com/BobLiterman/SISRS_Walkthrough/). After you have done that, you can jump back in here at **Step 05** to get a sense of the data analysis steps. A user-friendly version of this **entire** pipeline is currently under development, but all scripts are provided here.  
 
 ## Manuscript Walkthrough
 
 ### 01) Study Data  
-In this manuscript, we apply the SISRS (CITE) bioinformatics pipeline to generate millions of species-identifying single-nucleotide polymorphisms (**SNPs**) for diploid *Carya* (pecan and hickory), using only low-coverage, Illumina short-read data (i.e. genome skims). Samples from this study can be broken down into three groups:  
+In this manuscript, we apply the [**SISRS bioinformatics pipeline**](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-015-0632-y) to generate millions of species-identifying single-nucleotide polymorphisms (**SNPs**) for diploid *Carya* (pecan and hickory), using only low-coverage, Illumina short-read data (i.e. genome skims). Samples from this study can be broken down into three groups:  
 
 1) **Species samples**: Genome skim data for 8 species of diploid *Carya*  
 
@@ -462,7 +462,7 @@ The resulting alignment will include all sites that are parsimony-informative (i
 - For each sample, the highest proportion of SNPs derived from the correct species of record.  
 - For most samples, over 90% of SNPs matched the correct reference species.  
 - For samples of both *Carya laciniosa* and *Carya ovata* the highest proportion of SNPs matched the correct species, **but** a significantly large second of SNPs matched with the other species.  
-- Samples could be correctly identified even when reads were subsampled down to 0.01X coverage orior to classification (7.5Mb of WGS data)  
+- Samples could be correctly identified even when reads were subsampled down to 0.01X coverage prior to classification (7.5Mb of WGS data)  
 
 ### 08) **Classifying *Carya* hybrids based on Pooled Data SNPs**  
 Just as for the *Carya* species samples, we classified the hybrid samples based on SNPs, but these SNPs were derived after pooling the study and Companion data.  
@@ -470,12 +470,17 @@ Just as for the *Carya* species samples, we classified the hybrid samples based 
 - The code to analyze this data can be found in **Section 04** of [**scripts/R_Analysis/Carya_ManuScript.R**](scripts/R_Analysis/Carya_ManuScript.R)  
 - Alignments can be found in [**output/Classifier/Hybrids**](output/Classifier/Hybrids)  
 
-For all crosses between *C. illinoinensis* and another diploid *Carya*, hybrid SNP analysis revealed that the two highest proportions of SNPs from each sample derived from one of the two putative parental species. Circles with color denote significant SNP enrichment.   
+For all crosses between *C. illinoinensis* and another diploid *Carya*, hybrid SNP analysis revealed that the two highest proportions of SNPs from each sample derived from one of the two putative parental species.  
+
+- Circles with color denote significant SNP enrichment.  
+- Circle area is proportional to the number of SNPs matching a sample with a given reference species  
 
 ![alt text](Images/Carya_Crosses.png)  
 
 - Fewer total SNPs for *C. laciniosa* and *C. ovata* result in fewer detected SNPs in those hybrids, but results were significant.  
 - Crosses between *C. illinoinensis* and *C. aquatica* display a wider range of SNP ratios, as opposed to the ~50:50 ratios of cross with *C. cordiformis*, *C. myristiciformis*.  
+- Over 80% of all SNPs were covered by 3 or fewer reads, and over 85% of all SNPs were homozygous/fixed (rather than biallelic)  
+  - Pileups available in [**output/Focal_Pileups**](output/Focal_Pileups)  
 
 For crosses where one parent was a putative hybrid, we detect no parental hybridity. 
 
@@ -483,4 +488,3 @@ For crosses where one parent was a putative hybrid, we detect no parental hybrid
 
 - **Top**: No *C. cordiformis* signal detected in a putative cross involving *Carya x brownii* (*C. illinoinensis* x *C. cordiformis*). Sample appears to be *C. illinoinensis* x *C. laciniosa* (i.e. *Carya x nussbaumeri*)  
 - **Bottom**: No *C. cordiformis* or *C. ovata* signal detected in putative crosses involving *Carya x laneyi* (*C. illinoinensis*/*C. ovata*/*C. cordiformis*). Samples both appear to be *C. illinoinensis*.  
-
