@@ -412,7 +412,7 @@ python filter_nexus_for_missing.py $PWD/alignment_pi.nex 0
 
 Using the gapless alignments of parsimony-informative sites, we used IQ-Tree v.1.6.7 (http://www.iqtree.org/) to infer maximum-likelihood trees for the group. All datasets resulted in a single topology (below), which was concordant with findings from [**Huang et al. 2019**](https://academic.oup.com/gigascience/article/8/5/giz036/5484800). Because tetraploids were not included in this analysis (pipeline development ongoing), we place tetraploids on this tree based on their placement in Huang et al. 2019. 
 
-<img src="Images/Phylogeny.png" alt="drawing" width="200"/>
+<img src="Images/Phylogeny.png" alt="drawing" width="400"/>
 
 ### 07) **Classifying Study *Carya* based on Companion Data SNPs**  
 
